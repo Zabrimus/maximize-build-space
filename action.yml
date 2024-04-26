@@ -76,14 +76,14 @@ runs:
         remove-codeql: 'true'
         remove-docker-images: 'false'
 
-    - name: Finalization
-      shell: bash
-      run: |
-        echo "Packages:"
-        dpkg -l
-        
-        echo "Size:"
-        dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n
-        
-        echo "Free space:"
-        df -h
+    #- name: Finalization
+    #  shell: bash
+    #  run: |
+    #    echo "Packages:"
+    #    dpkg -l
+    #
+    #    echo "Size:"
+    #    dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n
+    #
+    #    echo "Free space:"
+    #    df -h
