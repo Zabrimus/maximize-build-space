@@ -1,0 +1,89 @@
+name: 'Maximize build space'
+description: maximize build space
+runs:
+  using: "composite"
+  steps:
+    - name: Remove packages
+      shell: bash
+      run: |          
+        sudo docker rmi $(sudo docker images -a -q)
+
+        sudo apt -y remove --purge \
+          humanity-icon-theme \
+          ubuntu-mono \
+          skopeo \
+          adwaita-icon-theme \
+          hicolor-icon-theme \
+          snapd \
+          google-chrome-stable \
+          microsoft-edge-stable \
+          firefox \
+          kubectl \
+          r-cran* \
+          libicu-dev \
+          containerd.io                         
+
+        sudo apt -y remove --purge \
+          azure-cli \
+          google-cloud-cli \
+          powershell \
+          cpp-{9,10,11,12} \
+          gfortran-* \
+          g++-{9,10,11,12} \
+          temurin-8-jdk \
+          gcc-{9,10,11,12} \
+          firefox \
+          llvm-* \
+          temurin-* \
+          dotnet-sdk-* \
+          php8* \
+          mono* \
+          mysql* \
+          libllvm* \
+          docker-ce* \
+          libclang* \
+          postgresql* \
+          lld* \
+          subversion \
+          libmono* \
+          podman 
+
+        sudo apt -y autoremove
+        sudo apt -y clean
+
+        sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php /usr/share/man /usr/share/doc \
+                    /usr/local/aws-sam-cli /usr/local/aws-cli /usr/local/share/powershell /usr/share/maven-repo /usr/share/maven-repo \
+                    /usr/share/az_11.3.1 /var/lib/gems /opt/az /usr/libexec/docker /etc/docker \
+                    /usr/lib/heroku /usr/lib/llvm-14 /usr/lib/ruby /usr/local/include/node /usr/local/lib/node_modules \
+                    /usr/local/.ghcup /usr/local/n /usr/local/doc /usr/local/share/vcpkg /usr/local/julia1.10.2 \
+                    /usr/share/ri /var/lib/docker /var/lib/php /opt/pipx /opt/microsoft \
+                    usr/include/ruby* /usr/include/postgresql /usr/lib/jvm/java-11-openjdk-amd64/legal usr/lib/jvm/java-11-openjdk-amd64/man \
+                    /usr/lib/x86_64-linux-gnu/ruby /usr/local/share/chromium /usr/local/man /usr/share/swig4.0 /usr/share/apache-maven* \
+                    /usr/share/rubygems-integration /usr/share/miniconda /usr/share/swift /usr/share/alsa /usr/share/icons /var/lib/waagent \
+                    /var/lib/apt/lists /root/.dotnet /root/.npm /root/.mozilla /root/.local/share/powershell /root/.gradle \
+                    /root/.android 
+        
+        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+
+    - name: Maximize build space
+      uses: easimon/maximize-build-space@master
+      with:
+        root-reserve-mb: 512
+        swap-size-mb: 6144
+        remove-dotnet: 'true'
+        remove-android: 'true'
+        remove-haskell: 'true'
+        remove-codeql: 'true'
+        remove-docker-images: 'false'
+
+    - name: Finalization
+      shell: bash
+      run: |
+        echo "Packages:"
+        dpkg -l
+        
+        echo "Size:"
+        dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n
+        
+        echo "Free space:"
+        df -h
