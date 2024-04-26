@@ -49,6 +49,9 @@ runs:
           podman 
 
         sudo apt -y autoremove
+        sudo apt update
+        
+        sudo apt -y install gcc make git unzip wget xz-utils bc gperf zip g++ xfonts-utils xsltproc openjdk-11-jre-headless
         sudo apt -y clean
 
         sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php /usr/share/man /usr/share/doc \
