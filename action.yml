@@ -27,11 +27,11 @@ runs:
           azure-cli \
           google-cloud-cli \
           powershell \
-          cpp-{9,10,11,12} \
+          cpp-{9,10,11} \
           gfortran-* \
-          g++-{9,10,11,12} \
+          g++-{9,10,11} \
           temurin-8-jdk \
-          gcc-{9,10,11,12} \
+          gcc-{9,10,11} \
           firefox \
           llvm-* \
           temurin-* \
