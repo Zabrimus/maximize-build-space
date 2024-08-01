@@ -5,7 +5,12 @@ runs:
   steps:
     - name: Remove packages
       shell: bash
-      run: |          
+      run: |
+        sudo apt update
+        sudo apt search openjdk-11
+        sudo apt -y install openjdk-11-jre-headless
+        exit 1
+
         sudo docker rmi $(sudo docker images -a -q)
 
         sudo apt -y remove --purge \
