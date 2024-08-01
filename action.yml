@@ -6,8 +6,13 @@ runs:
     - name: Remove packages
       shell: bash
       run: |
+        echo "==> Update 1"
+        sudo apt update
+
+        echo "==> Remove docker images"
         sudo docker rmi $(sudo docker images -a -q)
 
+        echo "==> Remove and purge packages (part 1)"        
         sudo apt -y remove --purge \
           humanity-icon-theme \
           ubuntu-mono \
@@ -23,6 +28,7 @@ runs:
           libicu-dev \
           containerd.io                         
 
+        echo "==> Remove and purge packages (part 2)"
         sudo apt -y remove --purge \
           azure-cli \
           google-cloud-cli \
@@ -45,19 +51,21 @@ runs:
           libmono* \
           podman 
 
+        echo "==> Autoremove"
         sudo apt -y autoremove
+        
+        echo "==> Update 2"
         sudo apt update
         
-        #sudo apt -y install gcc make git unzip wget xz-utils bc gperf zip g++ xfonts-utils xsltproc openjdk-11-jre-headless libxml-parser-perl lzop libjson-parse-perl libjson-perl \
-        #                    libparse-yapp-perl libncurses5-dev bc bzip2 diffutils gawk gcc gperf gzip file patchutils lzop make patch perl sed tar unzip wget xz-utils zip zstd \
-        #                    libncurses5-dev libc6-dev libparse-yapp-perl libxml-parser-perl qemu-user-binfmt g++ xfonts-utils xsltproc rdfind
-
-        sudo apt -y install gcc make git unzip wget xz-utils bc gperf zip g++ xfonts-utils xsltproc libxml-parser-perl lzop libjson-parse-perl libjson-perl \
+        echo "==> Install packages"        
+        sudo apt -y install gcc make git unzip wget xz-utils bc gperf zip g++ xfonts-utils xsltproc openjdk-11-jre-headless libxml-parser-perl lzop libjson-parse-perl libjson-perl \
                             libparse-yapp-perl libncurses5-dev bc bzip2 diffutils gawk gcc gperf gzip file patchutils lzop make patch perl sed tar unzip wget xz-utils zip zstd \
                             libncurses5-dev libc6-dev libparse-yapp-perl libxml-parser-perl qemu-user-binfmt g++ xfonts-utils xsltproc rdfind
         
+        echo "==> Clean"        
         sudo apt -y clean
 
+        echo "==> Remove"      
         sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php /usr/share/man /usr/share/doc \
                     /usr/local/aws-sam-cli /usr/local/aws-cli /usr/local/share/powershell /usr/share/maven-repo /usr/share/maven-repo \
                     /usr/share/az_11.3.1 /var/lib/gems /opt/az /usr/libexec/docker /etc/docker \
