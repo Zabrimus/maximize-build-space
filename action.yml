@@ -3,102 +3,134 @@ description: maximize build space
 runs:
   using: "composite"
   steps:
-    - name: Remove packages
+    - name: Disk space report before modification
+      shell: bash
+      run: df -h
+
+    - name: Remove unused packages
       shell: bash
       run: |
-        echo "==> Update 1"
+        sudo apt-get remove -y --purge '^aspnetcore-.*'
+        sudo apt-get remove -y --purge '^dotnet-.*'
+        sudo apt-get remove -y --purge '^llvm-.*'
+        sudo apt-get remove -y --purge '^clang-.*'
+        sudo apt-get remove -y --purge 'php.*'
+        sudo apt-get remove -y --purge '^mongodb-.*'
+        sudo apt-get remove -y --purge '^mysql-.*'
+        sudo apt-get remove -y --purge '^postgresql-.*'
+        sudo apt-get remove -y --purge '^temurin.*'
+        sudo apt-get remove -y --purge '^r-base.*'
+        sudo apt-get remove -y --purge '^mono.*'
+        sudo apt-get remove -y --purge '^lld.*'
+        sudo apt-get remove -y --purge '^gfortran.*'
+        sudo apt-get remove -y --purge '^mercurial.*'      
+        sudo apt-get remove -y --purge '^apache2.*'
+        sudo apt-get remove -y --purge '^byobu.*'
+        sudo apt-get remove -y --purge '^cloud-.*'         
+        sudo apt-get remove -y --purge '^imagemagick.*'
+        sudo apt-get remove -y --purge '^nginx.*'
+        sudo apt-get remove -y --purge '^ruby.*'
+        sudo apt-get remove -y --purge '^swig.*'
+        sudo apt-get remove -y --purge '^tk.*'
+        sudo apt-get remove -y --purge '^tcl.*'          
+        sudo apt-get remove -y --purge '^ubuntu-pro.*'
+        sudo apt-get remove -y --purge cpp-* g++-* gcc-*
+        sudo apt-get remove -y --purge '^linux-headers.*'        
+        sudo apt-get remove -y --purge '^mssql.*'          
+        sudo apt-get remove -y --purge google-chrome-stable microsoft-edge-stable
+        sudo apt-get remove -y --purge google-cloud-cli --fix-missing
+        sudo apt-get remove -y --purge powershell --fix-missing
+        sudo apt-get remove -y --purge azure-cli firefox mono-devel libgl1-mesa-dri --fix-missing
+
+    - name: Install necessary packages
+      shell: bash
+      run: |
         sudo apt update
-
-        echo "==> Remove docker images"
-        sudo docker rmi $(sudo docker images -a -q)
-
-        echo "==> Remove and purge packages (part 1)"        
-        sudo apt -y remove --purge \
-          humanity-icon-theme \
-          ubuntu-mono \
-          skopeo \
-          adwaita-icon-theme \
-          hicolor-icon-theme \
-          snapd \
-          google-chrome-stable \
-          microsoft-edge-stable \
-          firefox \
-          kubectl \
-          r-cran* \
-          libicu-dev \
-          containerd.io                         
-
-        echo "==> Remove and purge packages (part 2)"
-        sudo apt -y remove --purge \
-          azure-cli \
-          google-cloud-cli \
-          powershell \
-          gfortran-* \
-          temurin-8-jdk \
-          firefox \
-          llvm-* \
-          temurin-* \
-          dotnet-sdk-* \
-          php8* \
-          mono* \
-          mysql* \
-          libllvm* \
-          docker-ce* \
-          libclang* \
-          postgresql* \
-          lld* \
-          subversion \
-          libmono* \
-          podman 
-
-        echo "==> Autoremove"
-        sudo apt -y autoremove
-        
-        echo "==> Update 2"
-        sudo apt update
-        
-        echo "==> Install packages"        
         sudo apt -y install gcc make git unzip wget xz-utils bc gperf zip g++ xfonts-utils xsltproc openjdk-11-jre-headless libxml-parser-perl lzop libjson-parse-perl libjson-perl \
-                            libparse-yapp-perl libncurses5-dev bc bzip2 diffutils gawk gcc gperf gzip file patchutils lzop make patch perl sed tar unzip wget xz-utils zip zstd \
-                            libncurses5-dev libc6-dev libparse-yapp-perl libxml-parser-perl qemu-user-binfmt g++ xfonts-utils xsltproc rdfind
-        
-        echo "==> Clean"        
-        sudo apt -y clean
+            libparse-yapp-perl libncurses5-dev bc bzip2 diffutils gawk gcc gperf gzip file patchutils lzop make patch perl sed tar unzip wget xz-utils zip zstd \
+            libncurses5-dev libc6-dev libparse-yapp-perl libxml-parser-perl qemu-user-binfmt g++ xfonts-utils xsltproc rdfind
 
-        echo "==> Remove"      
-        sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php /usr/share/man /usr/share/doc \
-                    /usr/local/aws-sam-cli /usr/local/aws-cli /usr/local/share/powershell /usr/share/maven-repo /usr/share/maven-repo \
-                    /usr/share/az_11.3.1 /var/lib/gems /opt/az /usr/libexec/docker /etc/docker \
-                    /usr/lib/heroku /usr/lib/llvm-14 /usr/lib/ruby /usr/local/include/node /usr/local/lib/node_modules \
-                    /usr/local/.ghcup /usr/local/n /usr/local/doc /usr/local/share/vcpkg /usr/local/julia1.10.2 \
-                    /usr/share/ri /var/lib/docker /var/lib/php /opt/pipx /opt/microsoft \
-                    usr/include/ruby* /usr/include/postgresql /usr/lib/jvm/java-11-openjdk-amd64/legal usr/lib/jvm/java-11-openjdk-amd64/man \
-                    /usr/lib/x86_64-linux-gnu/ruby /usr/local/share/chromium /usr/local/man /usr/share/swig4.0 /usr/share/apache-maven* \
-                    /usr/share/rubygems-integration /usr/share/miniconda /usr/share/swift /usr/share/alsa /usr/share/icons /var/lib/waagent \
-                    /var/lib/apt/lists /root/.dotnet /root/.npm /root/.mozilla /root/.local/share/powershell /root/.gradle \
-                    /root/.android 
-        
-        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+        - name: clean apt
+          run: |
+            sudo apt purge '~c'
+            sudo apt-get autoremove -y
+            sudo apt clean
 
-    - name: Maximize build space
-      uses: easimon/maximize-build-space@master
-      with:
-        root-reserve-mb: 512
-        swap-size-mb: 6144
-        remove-dotnet: 'true'
-        remove-android: 'true'
-        remove-haskell: 'true'
-        remove-codeql: 'true'
-        remove-docker-images: 'false'
+        - name: Remove Hosted Tool Cache
+          shell: bash
+          run: |
+            sudo rm -rf /opt/hostedtoolcache
 
-    #- name: Finalization
-    #  shell: bash
-    #  run: |
-    #    echo "Packages:"
-    #    dpkg -l
-    #
-    #    echo "Size:"
-    #    dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n
-    #
-    #    echo "Free space:"
-    #    df -h
+        - name: Remove Go
+          shell: bash
+          run: |
+            sudo rm -rf /opt/hostedtoolcache/go
+
+        - name: Remove CodeQL
+          shell: bash
+          run: |
+            sudo rm -rf /opt/hostedtoolcache/CodeQL
+
+        - name: Remove PowerShell
+          shell: bash
+          run: |
+            sudo rm -rf /usr/local/share/powershell
+
+        - name: Remove Android SDK
+          shell: bash
+          run: |
+            sudo rm -rf /usr/local/lib/android
+
+        - name: Remove Haskell GHC
+          shell: bash
+          run: |
+            sudo rm -rf /opt/ghc
+            sudo rm -rf /usr/local/.ghcup/ghc
+
+        - name: Remove Swift
+          shell: bash
+          run: |
+            sudo rm -rf /usr/share/swift
+
+        - name: Remove .NET
+          shell: bash
+          run: |
+            sudo rm -rf /usr/share/dotnet
+
+        - name: Remove az
+          shell: bash
+          run: |
+            sudo rm -rf /opt/az
+
+        - name: Remove Docker images
+          shell: bash
+          run: |
+            sudo docker image prune --all --force
+            sudo apt-get remove -y --purge '^docker-ce.*'          
+
+        - name: Remove Agent tools directory
+          shell: bash
+          run: |
+            sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+
+        - name: Remove other directories
+          shell: bash
+          run: |
+            sudo rm -rf /etc/mono
+            sudo rm -rf /imagegeneration
+
+        - name: Remove Swap
+          shell: bash
+          run: |
+            export SWAP_FILE=$(swapon --show=NAME | tail -n 1)
+            sudo swapoff $SWAP_FILE
+            sudo rm $SWAP_FILE
+
+        - name: List packages
+          shell: bash
+          run: sudo dpkg -l
+
+        - name: Disk space report after modification
+          shell: bash
+          run: |
+            df -h
