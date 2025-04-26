@@ -50,6 +50,7 @@ runs:
             libncurses5-dev libc6-dev libparse-yapp-perl libxml-parser-perl qemu-user-binfmt g++ xfonts-utils xsltproc rdfind
 
         - name: clean apt
+          shell: bash
           run: |
             sudo apt purge '~c'
             sudo apt-get autoremove -y
