@@ -10,8 +10,7 @@ runs:
     - name: Remove unused packages
       shell: bash
       run: |
-        sudo snap list
-        
+        sudo apt-get remove -y --purge '^snapd.*'
         sudo apt-get remove -y --purge '^aspnetcore-.*'
         sudo apt-get remove -y --purge '^dotnet-.*'
         sudo apt-get remove -y --purge '^llvm-.*'
