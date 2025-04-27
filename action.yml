@@ -37,10 +37,10 @@ runs:
         sudo apt-get remove -y --purge '^linux-headers.*'        
         sudo apt-get remove -y --purge '^mssql.*'          
         sudo apt-get remove -y --purge '^gcc-12.*'
-        sudo apt-get remove -y --purge '^g\\+\\+-12.*'
+        sudo apt-get remove -y --purge '^g\+\+-12.*'
         sudo apt-get remove -y --purge '^cpp-12.*'
         sudo apt-get remove -y --purge '^gcc-13.*'
-        sudo apt-get remove -y --purge '^g\\+\\+-13.*'
+        sudo apt-get remove -y --purge '^g\+\+-13.*'
         sudo apt-get remove -y --purge '^cpp-13.*'
         sudo apt-get remove -y --purge '^fonts-.*'      
         sudo apt-get remove -y --purge google-chrome-stable microsoft-edge-stable
