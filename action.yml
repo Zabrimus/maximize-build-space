@@ -10,6 +10,8 @@ runs:
     - name: Remove unused packages
       shell: bash
       run: |
+        sudo snap list
+        
         sudo apt-get remove -y --purge '^aspnetcore-.*'
         sudo apt-get remove -y --purge '^dotnet-.*'
         sudo apt-get remove -y --purge '^llvm-.*'
@@ -40,7 +42,7 @@ runs:
         sudo apt-get remove -y --purge '?name(^g\+\+.-*) ?and(?not(?name(^g\+\+-14.*)))'
         sudo apt-get remove -y --purge '?name(^cpp-.*) ?and(?not(?name(^cpp-14.*)))'                    
         sudo apt-get remove -y --purge '^fonts-.*'      
-        sudo apt-get remove -y --purge google-chrome-stable microsoft-edge-stable
+        # sudo apt-get remove -y --purge google-chrome-stable microsoft-edge-stable
         sudo apt-get remove -y --purge google-cloud-cli --fix-missing
         sudo apt-get remove -y --purge powershell --fix-missing
         sudo apt-get remove -y --purge azure-cli firefox mono-devel libgl1-mesa-dri --fix-missing
