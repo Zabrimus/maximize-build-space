@@ -36,6 +36,10 @@ runs:
         sudo apt-get remove -y --purge '^ubuntu-pro.*'      
         sudo apt-get remove -y --purge '^linux-headers.*'        
         sudo apt-get remove -y --purge '^mssql.*'          
+        sudo apt-get remove -y --purge '^gcc.*'
+        sudo apt-get remove -y --purge '^g++.*'
+        sudo apt-get remove -y --purge '^cpp.*'
+        sudo apt-get remove -y --purge '^fonts-.*'        
         sudo apt-get remove -y --purge google-chrome-stable microsoft-edge-stable
         sudo apt-get remove -y --purge google-cloud-cli --fix-missing
         sudo apt-get remove -y --purge powershell --fix-missing
