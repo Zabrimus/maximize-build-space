@@ -142,18 +142,6 @@ runs:
         sudo rm -rf /etc/mono
         sudo rm -rf /imagegeneration
 
-    - name: Remove Swap
-      shell: bash
-      run: |
-        swapoff --help
-        
-        export SWAP_FILE=$(swapon --show=NAME | tail -n 1)
-        
-        echo "Swap: $SWAP_FILE"
-        
-        sudo swapoff $SWAP_FILE
-        sudo rm $SWAP_FILE
-
     - name: List packages
       shell: bash
       run: sudo dpkg -l
