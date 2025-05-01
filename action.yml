@@ -45,6 +45,21 @@ runs:
         sudo apt-get remove -y --purge google-cloud-cli --fix-missing
         sudo apt-get remove -y --purge powershell --fix-missing
         sudo apt-get remove -y --purge azure-cli firefox mono-devel libgl1-mesa-dri --fix-missing
+        
+        rm -Rf /usr/libexec/docker
+        rm -Rf /usr/share/php
+        rm -Rf /etc/php/8.3/mods-available
+        rm -Rf /etc/mysql
+        rm -Rf /var/lib/apache2
+        rm -Rf /var/www/html
+        rm -Rf /etc/cloud/cloud.cfg.d
+        rm -Rf /var/lib/gems/3.2.0
+        rm -Rf /var/lib/update-manager
+        rm -Rf /etc/firefox
+        rm -Rf /etc/apport/native-origins.d
+        rm -Rf /etc/apport/blacklist.d
+        rm -Rf /usr/local/share/man
+        rm -Rf /opt/az        
 
     - name: Install necessary packages
       shell: bash
@@ -127,7 +142,12 @@ runs:
     - name: Remove Swap
       shell: bash
       run: |
+        swapoff --help
+        
         export SWAP_FILE=$(swapon --show=NAME | tail -n 1)
+        
+        echo "Swap: $SWAP_FILE"
+        
         sudo swapoff $SWAP_FILE
         sudo rm $SWAP_FILE
 
