@@ -46,20 +46,20 @@ runs:
         sudo apt-get remove -y --purge powershell --fix-missing
         sudo apt-get remove -y --purge azure-cli firefox mono-devel libgl1-mesa-dri --fix-missing
         
-        rm -Rf /usr/libexec/docker
-        rm -Rf /usr/share/php
-        rm -Rf /etc/php/8.3/mods-available
-        rm -Rf /etc/mysql
-        rm -Rf /var/lib/apache2
-        rm -Rf /var/www/html
-        rm -Rf /etc/cloud/cloud.cfg.d
-        rm -Rf /var/lib/gems/3.2.0
-        rm -Rf /var/lib/update-manager
-        rm -Rf /etc/firefox
-        rm -Rf /etc/apport/native-origins.d
-        rm -Rf /etc/apport/blacklist.d
-        rm -Rf /usr/local/share/man
-        rm -Rf /opt/az        
+        sudo rm -Rf /usr/libexec/docker
+        sudo rm -Rf /usr/share/php
+        sudo rm -Rf /etc/php/8.3/mods-available
+        sudo rm -Rf /etc/mysql
+        sudo rm -Rf /var/lib/apache2
+        sudo rm -Rf /var/www/html
+        sudo rm -Rf /etc/cloud/cloud.cfg.d
+        sudo rm -Rf /var/lib/gems/3.2.0
+        sudo rm -Rf /var/lib/update-manager
+        sudo rm -Rf /etc/firefox
+        sudo rm -Rf /etc/apport/native-origins.d
+        sudo rm -Rf /etc/apport/blacklist.d
+        sudo rm -Rf /usr/local/share/man
+        sudo rm -Rf /opt/az        
 
     - name: Install necessary packages
       shell: bash
@@ -68,6 +68,9 @@ runs:
         sudo apt -y install gcc make git unzip wget xz-utils bc gperf zip g++ xfonts-utils xsltproc openjdk-11-jre-headless libxml-parser-perl lzop libjson-parse-perl libjson-perl \
             libparse-yapp-perl libncurses5-dev bc bzip2 diffutils gawk gcc gperf gzip file patchutils lzop make patch perl sed tar unzip wget xz-utils zip zstd \
             libncurses5-dev libc6-dev libparse-yapp-perl libxml-parser-perl qemu-user-binfmt g++ xfonts-utils xsltproc rdfind
+
+        sudo snap remove $(snap list | awk '!/^Name|^core|^snapd/ {print $1}') || true
+        sudo apt -y --purge purge snapd || true
 
     - name: clean apt
       shell: bash
