@@ -37,12 +37,12 @@ runs:
         sudo apt-get remove -y --purge '^ubuntu-pro.*'      
         sudo apt-get remove -y --purge '^linux-headers.*'        
         sudo apt-get remove -y --purge '^mssql.*'          
-        sudo apt-get remove -y --purge '?name(^gcc-.*) ?and(?not(?name(^gcc-14.*)))'
-        sudo apt-get remove -y --purge '?name(^g\+\+.-*) ?and(?not(?name(^g\+\+-14.*)))'
-        sudo apt-get remove -y --purge '?name(^cpp-.*) ?and(?not(?name(^cpp-14.*)))'                    
+        sudo apt-get remove -y --purge '?name(^gcc-.*) ?and(?not(?name(^gcc-14.*))) ?and(?not(?name(^gcc-13.*)))'
+        sudo apt-get remove -y --purge '?name(^g\+\+.-*) ?and(?not(?name(^g\+\+-14.*))) ?and(?not(?name(^g\+\+-13.*)))'
+        sudo apt-get remove -y --purge '?name(^cpp-.*) ?and(?not(?name(^cpp-14.*))) ?and(?not(?name(^cpp-13.*)))'                    
         sudo apt-get remove -y --purge '^fonts-.*'      
         # sudo apt-get remove -y --purge google-chrome-stable microsoft-edge-stable
-        sudo apt-get remove -y --purge google-cloud-cli --fix-missing
+        # sudo apt-get remove -y --purge google-cloud-cli --fix-missing
         sudo apt-get remove -y --purge powershell --fix-missing
         sudo apt-get remove -y --purge azure-cli firefox mono-devel libgl1-mesa-dri --fix-missing
         
@@ -66,11 +66,14 @@ runs:
       run: |
         sudo apt update
         sudo apt -y install gcc make git unzip wget xz-utils bc gperf zip g++ xfonts-utils xsltproc openjdk-11-jre-headless libxml-parser-perl lzop libjson-parse-perl libjson-perl \
-            libparse-yapp-perl libncurses5-dev bc bzip2 diffutils gawk gcc gperf gzip file patchutils lzop make patch perl sed tar unzip wget xz-utils zip zstd \
-            libncurses5-dev libc6-dev libparse-yapp-perl libxml-parser-perl qemu-user-binfmt g++ xfonts-utils xsltproc rdfind
+              libparse-yapp-perl libncurses5-dev bc bzip2 diffutils gawk gcc gperf gzip file patchutils lzop make patch perl sed tar unzip wget xz-utils zip zstd \
+              libncurses5-dev libc6-dev libparse-yapp-perl libxml-parser-perl qemu-user-binfmt g++ xfonts-utils xsltproc rdfind libc6-amd64-cross libglib2.0-0 \
+              libelf-dev elfutils
 
         sudo snap remove $(snap list | awk '!/^Name|^core|^snapd/ {print $1}') || true
         sudo apt -y --purge purge snapd || true
+        sudo apt -y --purge autoremove
+        sudo apt clean
 
     - name: clean apt
       shell: bash
