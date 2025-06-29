@@ -10,41 +10,41 @@ runs:
     - name: Remove unused packages
       shell: bash
       run: |
-        sudo apt-get remove -y --purge '^snapd.*'
-        sudo apt-get remove -y --purge '^aspnetcore-.*'
-        sudo apt-get remove -y --purge '^dotnet-.*'
-        sudo apt-get remove -y --purge '^llvm-.*'
-        sudo apt-get remove -y --purge '^clang-.*'
-        sudo apt-get remove -y --purge 'php.*'
-        sudo apt-get remove -y --purge '^mongodb-.*'
-        sudo apt-get remove -y --purge '^mysql-.*'
-        sudo apt-get remove -y --purge '^postgresql-.*'
-        sudo apt-get remove -y --purge '^temurin.*'
-        sudo apt-get remove -y --purge '^r-base.*'
-        sudo apt-get remove -y --purge '^mono.*'
-        sudo apt-get remove -y --purge '^lld.*'
-        sudo apt-get remove -y --purge '^gfortran.*'
-        sudo apt-get remove -y --purge '^mercurial.*'      
-        sudo apt-get remove -y --purge '^apache2.*'
-        sudo apt-get remove -y --purge '^byobu.*'
-        sudo apt-get remove -y --purge '^cloud-.*'         
-        sudo apt-get remove -y --purge '^imagemagick.*'
-        sudo apt-get remove -y --purge '^nginx.*'
-        sudo apt-get remove -y --purge '^ruby.*'
-        sudo apt-get remove -y --purge '^swig.*'
-        sudo apt-get remove -y --purge '^tk.*'
-        sudo apt-get remove -y --purge '^tcl.*'          
-        sudo apt-get remove -y --purge '^ubuntu-pro.*'      
-        sudo apt-get remove -y --purge '^linux-headers.*'        
-        sudo apt-get remove -y --purge '^mssql.*'          
-        sudo apt-get remove -y --purge '?name(^gcc-.*) ?and(?not(?name(^gcc-14.*))) ?and(?not(?name(^gcc-13.*)))'
-        sudo apt-get remove -y --purge '?name(^g\+\+.-*) ?and(?not(?name(^g\+\+-14.*))) ?and(?not(?name(^g\+\+-13.*)))'
-        sudo apt-get remove -y --purge '?name(^cpp-.*) ?and(?not(?name(^cpp-14.*))) ?and(?not(?name(^cpp-13.*)))'                    
-        sudo apt-get remove -y --purge '^fonts-.*'      
-        # sudo apt-get remove -y --purge google-chrome-stable microsoft-edge-stable
-        # sudo apt-get remove -y --purge google-cloud-cli --fix-missing
-        sudo apt-get remove -y --purge powershell --fix-missing
-        sudo apt-get remove -y --purge azure-cli firefox mono-devel libgl1-mesa-dri --fix-missing
+        sudo apt-get remove -y --purge powershell --fix-missing || true
+        sudo apt-get remove -y --purge '^snapd.*' || true
+        sudo apt-get remove -y --purge '^aspnetcore-.*' || true
+        sudo apt-get remove -y --purge '^dotnet-.*' || true
+        sudo apt-get remove -y --purge '^llvm-.*' || true
+        sudo apt-get remove -y --purge '^clang-.*' || true
+        sudo apt-get remove -y --purge 'php.*' || true
+        sudo apt-get remove -y --purge '^mongodb-.*' || true
+        sudo apt-get remove -y --purge '^mysql-.*' || true
+        sudo apt-get remove -y --purge '^postgresql-.*' || true
+        sudo apt-get remove -y --purge '^temurin.*' || true
+        sudo apt-get remove -y --purge '^r-base.*' || true
+        sudo apt-get remove -y --purge '^mono.*' || true
+        sudo apt-get remove -y --purge '^lld.*' || true
+        sudo apt-get remove -y --purge '^gfortran.*' || true
+        sudo apt-get remove -y --purge '^mercurial.*' || true      
+        sudo apt-get remove -y --purge '^apache2.*' || true
+        sudo apt-get remove -y --purge '^byobu.*' || true
+        sudo apt-get remove -y --purge '^cloud-.*' || true        
+        sudo apt-get remove -y --purge '^imagemagick.*' || true
+        sudo apt-get remove -y --purge '^nginx.*' || true
+        sudo apt-get remove -y --purge '^ruby.*' || true
+        sudo apt-get remove -y --purge '^swig.*' || true
+        sudo apt-get remove -y --purge '^tk.*' || true
+        sudo apt-get remove -y --purge '^tcl.*' || true          
+        sudo apt-get remove -y --purge '^ubuntu-pro.*' || true  
+        sudo apt-get remove -y --purge '^linux-headers.*' || true   
+        sudo apt-get remove -y --purge '^mssql.*' || true          
+        sudo apt-get remove -y --purge '?name(^gcc-.*) ?and(?not(?name(^gcc-14.*))) ?and(?not(?name(^gcc-13.*)))' || true
+        sudo apt-get remove -y --purge '?name(^g\+\+.-*) ?and(?not(?name(^g\+\+-14.*))) ?and(?not(?name(^g\+\+-13.*)))' || true
+        sudo apt-get remove -y --purge '?name(^cpp-.*) ?and(?not(?name(^cpp-14.*))) ?and(?not(?name(^cpp-13.*)))' || true                    
+        sudo apt-get remove -y --purge '^fonts-.*' || true     
+        # sudo apt-get remove -y --purge google-chrome-stable microsoft-edge-stable || true
+        # sudo apt-get remove -y --purge google-cloud-cli --fix-missing || true        
+        sudo apt-get remove -y --purge azure-cli firefox mono-devel libgl1-mesa-dri --fix-missing || true
         
         sudo rm -Rf /usr/libexec/docker
         sudo rm -Rf /usr/share/php
