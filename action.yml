@@ -7,147 +7,71 @@ runs:
       shell: bash
       run: df -h
 
-    - name: Remove unused packages
-      shell: bash
-      run: |
-        sudo apt-get remove -y --purge powershell --fix-missing || true
-        sudo apt-get remove -y --purge '^snapd.*' || true
-        sudo apt-get remove -y --purge '^aspnetcore-.*' || true
-        sudo apt-get remove -y --purge '^dotnet-.*' || true
-        sudo apt-get remove -y --purge '^llvm-.*' || true
-        sudo apt-get remove -y --purge '^clang-.*' || true
-        sudo apt-get remove -y --purge 'php.*' || true
-        sudo apt-get remove -y --purge '^mongodb-.*' || true
-        sudo apt-get remove -y --purge '^mysql-.*' || true
-        sudo apt-get remove -y --purge '^postgresql-.*' || true
-        sudo apt-get remove -y --purge '^temurin.*' || true
-        sudo apt-get remove -y --purge '^r-base.*' || true
-        sudo apt-get remove -y --purge '^mono.*' || true
-        sudo apt-get remove -y --purge '^lld.*' || true
-        sudo apt-get remove -y --purge '^gfortran.*' || true
-        sudo apt-get remove -y --purge '^mercurial.*' || true      
-        sudo apt-get remove -y --purge '^apache2.*' || true
-        sudo apt-get remove -y --purge '^byobu.*' || true
-        sudo apt-get remove -y --purge '^cloud-.*' || true        
-        sudo apt-get remove -y --purge '^imagemagick.*' || true
-        sudo apt-get remove -y --purge '^nginx.*' || true
-        sudo apt-get remove -y --purge '^ruby.*' || true
-        sudo apt-get remove -y --purge '^swig.*' || true
-        sudo apt-get remove -y --purge '^tk.*' || true
-        sudo apt-get remove -y --purge '^tcl.*' || true          
-        sudo apt-get remove -y --purge '^ubuntu-pro.*' || true  
-        sudo apt-get remove -y --purge '^linux-headers.*' || true   
-        sudo apt-get remove -y --purge '^mssql.*' || true          
-        sudo apt-get remove -y --purge '?name(^gcc-.*) ?and(?not(?name(^gcc-14.*))) ?and(?not(?name(^gcc-13.*)))' || true
-        sudo apt-get remove -y --purge '?name(^g\+\+.-*) ?and(?not(?name(^g\+\+-14.*))) ?and(?not(?name(^g\+\+-13.*)))' || true
-        sudo apt-get remove -y --purge '?name(^cpp-.*) ?and(?not(?name(^cpp-14.*))) ?and(?not(?name(^cpp-13.*)))' || true                    
-        sudo apt-get remove -y --purge '^fonts-.*' || true     
-        # sudo apt-get remove -y --purge google-chrome-stable microsoft-edge-stable || true
-        # sudo apt-get remove -y --purge google-cloud-cli --fix-missing || true        
-        sudo apt-get remove -y --purge azure-cli firefox mono-devel libgl1-mesa-dri --fix-missing || true
-        
-        sudo rm -Rf /usr/libexec/docker
-        sudo rm -Rf /usr/share/php
-        sudo rm -Rf /etc/php/8.3/mods-available
-        sudo rm -Rf /etc/mysql
-        sudo rm -Rf /var/lib/apache2
-        sudo rm -Rf /var/www/html
-        sudo rm -Rf /etc/cloud/cloud.cfg.d
-        sudo rm -Rf /var/lib/gems/3.2.0
-        sudo rm -Rf /var/lib/update-manager
-        sudo rm -Rf /etc/firefox
-        sudo rm -Rf /etc/apport/native-origins.d
-        sudo rm -Rf /etc/apport/blacklist.d
-        sudo rm -Rf /usr/local/share/man
-        sudo rm -Rf /opt/az        
-
-    - name: Install necessary packages
+    - name: Preinstall packages
       shell: bash
       run: |
         sudo apt update
-        sudo apt -y install gcc make git unzip wget xz-utils bc gperf zip g++ xfonts-utils xsltproc openjdk-11-jre-headless libxml-parser-perl lzop libjson-parse-perl libjson-perl \
-              libparse-yapp-perl libncurses5-dev bc bzip2 diffutils gawk gcc gperf gzip file patchutils lzop make patch perl sed tar unzip wget xz-utils zip zstd \
-              libncurses5-dev libc6-dev libparse-yapp-perl libxml-parser-perl qemu-user-binfmt g++ xfonts-utils xsltproc rdfind libc6-amd64-cross libglib2.0-0 \
-              libelf-dev elfutils
+        sudo apt install eatmydata aptitude
+        sudo ln -s /usr/lib/x86_64-linux-gnu/libeatmydata.so /usr/lib/libeatmydata.so
 
-        sudo snap remove $(snap list | awk '!/^Name|^core|^snapd/ {print $1}') || true
-        sudo apt -y --purge purge snapd || true
-        sudo apt -y --purge autoremove
-        sudo apt clean
-
-    - name: clean apt
+    - name: Remove all packages which are not in important or required
       shell: bash
       run: |
-        sudo apt purge '~c'
-        sudo apt-get autoremove -y
-        sudo apt clean
-
-    - name: Remove Hosted Tool Cache
-      shell: bash
-      run: |
-        sudo rm -rf /opt/hostedtoolcache
-
-    - name: Remove Go
-      shell: bash
-      run: |
-        sudo rm -rf /opt/hostedtoolcache/go
-
-    - name: Remove CodeQL
-      shell: bash
-      run: |
-        sudo rm -rf /opt/hostedtoolcache/CodeQL
-
-    - name: Remove PowerShell
-      shell: bash
-      run: |
-        sudo rm -rf /usr/local/share/powershell
-
-    - name: Remove Android SDK
-      shell: bash
-      run: |
-        sudo rm -rf /usr/local/lib/android
-
-    - name: Remove Haskell GHC
-      shell: bash
-      run: |
-        sudo rm -rf /opt/ghc
-        sudo rm -rf /usr/local/.ghcup/ghc
-
-    - name: Remove Swift
-      shell: bash
-      run: |
-        sudo rm -rf /usr/share/swift
-
-    - name: Remove .NET
-      shell: bash
-      run: |
+        echo "Remove snapd"
+        sudo systemctl disable snapd || true
+        sudo snap remove $(snap list | awk '!/^Name|^core|^snapd/ {print $1}') || true          
+        sudo eatmydata apt -y --purge purge snapd || true          
+        
+        echo "Remove docker images"
+        docker system prune -af || true
+        docker builder prune -af || true
+        
+        echo "Remove non-important packages"
+        sudo eatmydata apt -y purge $(aptitude search '~i!~M!~prequired!~pimportant!~R~prequired!~R~R~prequired!~R~pimportant!~R~R~pimportant!initramfs-tools!eatmydata!shim-signed' | awk '{print $2}')
+        
+        echo "Autoremove"
+        sudo eatmydata apt -y --purge autoremove
+        
+        echo "Remove some directories"
+        sudo rm -rf /var/lib/gems/3.2.0 /usr/libexec/docker /etc/needrestart/conf.d \
+                    /etc/cloud/cloud.cfg.d /etc/ssh/sshd_config.d /usr/share/php \
+                    /lib/systemd/user-generators /lib/systemd/user /usr/local/share/man \
+                    /usr/lib/systemd/system-sleep /usr/lib/systemd/system-shutdown /etc/php/8.3/mods-available \
+                    /lib/modules/6.11.0-1018-azure /usr/share/az_12.5.0 /usr/share/miniconda \
+                    /usr/local/aws-cli /usr/share/kotlinc /home/runner/.dotnet /home/packer/.dotnet \
+                    /etc/skel/.dotnet /usr/local/man/ /usr/local/share/chromedriver-linux64 \
+                    /home/runner/.rustup /home/linuxbrew /usr/share/java /home/runner/.cargo \
+                    /var/lib/mysql /var/lib/waagent
+        
+        echo "Remove .NET SDKs"
         sudo rm -rf /usr/share/dotnet
-
-    - name: Remove az
-      shell: bash
-      run: |
-        sudo rm -rf /opt/az
-
-    - name: Remove Docker images
-      shell: bash
-      run: |
-        sudo docker image prune --all --force
-        sudo apt-get remove -y --purge '^docker-ce.*'          
-
-    - name: Remove Agent tools directory
-      shell: bash
-      run: |
-        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-
-    - name: Remove other directories
-      shell: bash
-      run: |
-        sudo rm -rf /etc/mono
-        sudo rm -rf /imagegeneration
-
-    - name: List packages
-      shell: bash
-      run: sudo dpkg -l
+        
+        echo "Remove Swift toolchain"
+        sudo rm -rf /usr/share/swift
+        
+        echo "Remove Haskell (GHC)"
+        sudo rm -rf /usr/local/.ghcup
+        
+        echo "Remove Julia"
+        sudo rm -rf /usr/local/julia*
+        
+        echo "Remove Android SDKs"
+        sudo rm -rf /usr/local/lib/android
+        
+        echo "Remove Chromium"
+        sudo rm -rf /usr/local/share/chromium
+        
+        echo "Remove Microsoft/Edge and Google Chrome builds"
+        sudo rm -rf /opt/microsoft /opt/google
+        
+        echo "Remove Azure CLI"
+        sudo rm -rf /opt/az          
+        
+        echo "Remove PowerShell"
+        sudo rm -rf /usr/local/share/powershell
+        
+        echo "Remove CodeQL and other toolcaches"
+        sudo rm -rf /opt/hostedtoolcache
 
     - name: Disk space report after modification
       shell: bash
