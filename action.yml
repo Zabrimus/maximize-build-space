@@ -11,7 +11,7 @@ runs:
       shell: bash
       run: |
         sudo apt update
-        sudo apt install eatmydata aptitude
+        sudo apt install -m eatmydata aptitude grub2-common mokutil grub-efi-amd64-signed grub-efi-arm64-signed 
         sudo ln -s /usr/lib/x86_64-linux-gnu/libeatmydata.so /usr/lib/libeatmydata.so
 
     - name: Remove all packages which are not in important or required
@@ -27,10 +27,10 @@ runs:
         docker builder prune -af || true
         
         echo "Remove non-important packages"
-        TOREMOVE=$(aptitude search '~i!~M!~prequired!~pimportant!~R~prequired!~R~R~prequired!~R~pimportant!~R~R~pimportant!initramfs-tools!eatmydata!shim-signed!grub-efi-arm64-signed!sbsigntool' | awk '{print $2}')
+        TOREMOVE=$(aptitude search '~i!~M!~prequired!~pimportant!~R~prequired!~R~R~prequired!~R~pimportant!~R~R~pimportant!initramfs-tools!eatmydata!shim-signed!grub-efi-arm64-signed!sbsigntool!secureboot-db!grub2-common!mokutil!grub-efi-amd64-signed!grub-efi-arm64-signed' | awk '{print $2}')
         echo "Remove Packages $TOREMOVE"
         
-        sudo eatmydata apt -y purge $(aptitude search '~i!~M!~prequired!~pimportant!~R~prequired!~R~R~prequired!~R~pimportant!~R~R~pimportant!initramfs-tools!eatmydata!shim-signed!grub-efi-arm64-signed!sbsigntool' | awk '{print $2}')
+        sudo eatmydata apt -y purge $(aptitude search '~i!~M!~prequired!~pimportant!~R~prequired!~R~R~prequired!~R~pimportant!~R~R~pimportant!initramfs-tools!eatmydata!shim-signed!grub-efi-arm64-signed!sbsigntool!secureboot-db!grub2-common!mokutil!grub-efi-amd64-signed!grub-efi-arm64-signed' | awk '{print $2}')
         
         echo "Autoremove"
         sudo eatmydata apt -y --purge autoremove
