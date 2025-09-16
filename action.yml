@@ -11,7 +11,7 @@ runs:
       shell: bash
       run: |
         sudo apt update
-        sudo apt install -m eatmydata aptitude grub2-common mokutil grub-efi-amd64-signed grub-efi-arm64-signed 
+        sudo apt install eatmydata aptitude grub2-common mokutil 
         sudo ln -s /usr/lib/x86_64-linux-gnu/libeatmydata.so /usr/lib/libeatmydata.so
 
     - name: Remove all packages which are not in important or required
