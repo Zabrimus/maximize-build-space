@@ -11,7 +11,7 @@ runs:
       shell: bash
       run: |
         sudo apt update
-        sudo apt install eatmydata aptitude grub2-common mokutil 
+        sudo apt install eatmydata aptitude shim-signed
         sudo ln -s /usr/lib/x86_64-linux-gnu/libeatmydata.so /usr/lib/libeatmydata.so
 
     - name: Remove all packages which are not in important or required
