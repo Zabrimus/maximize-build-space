@@ -23,9 +23,6 @@ jobs:
           
           echo "Free space:"
           df -h
-          
-          gcc -v
-          g++ -v
 
   build2:
     name: Maximize2
@@ -47,7 +44,4 @@ jobs:
           
           echo "Free space:"
           df -h
-          
-          gcc -v
-          g++ -v
-
+s
