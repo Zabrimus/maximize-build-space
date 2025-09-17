@@ -1,0 +1,43 @@
+name: Test Build Disk Space
+on:
+  workflow_dispatch:
+
+jobs:
+  build1:
+    name: Maximize1
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Maximize build space
+        uses: Zabrimus/maximize-build-space@master
+
+      - name: Build
+        run: |
+          echo "============================================"
+          echo " ENDE"
+          echo "============================================"
+          
+          echo "Free space:"
+          df -h
+          
+          gcc -v
+          g++ -v
+
+  build2:
+    name: Maximize2
+    runs-on: ubuntu-22.04-arm
+    steps:
+      - name: Maximize build space
+        uses: Zabrimus/maximize-build-space@master
+
+      - name: Build
+        run: |
+          echo "============================================"
+          echo " ENDE"
+          echo "============================================"
+          
+          echo "Free space:"
+          df -h
+          
+          gcc -v
+          g++ -v
+
