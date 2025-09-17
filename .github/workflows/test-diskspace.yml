@@ -7,6 +7,11 @@ jobs:
     name: Maximize1
     runs-on: ubuntu-22.04
     steps:
+      - name: System info
+        run: |
+            cat /etc/os-release || true
+            uname -a
+
       - name: Maximize build space
         uses: Zabrimus/maximize-build-space@master
 
@@ -26,6 +31,11 @@ jobs:
     name: Maximize2
     runs-on: ubuntu-22.04-arm
     steps:
+      - name: System info
+        run: |
+          cat /etc/os-release || true
+          uname -a
+
       - name: Maximize build space
         uses: Zabrimus/maximize-build-space@master
 
