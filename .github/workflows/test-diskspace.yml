@@ -44,4 +44,4 @@ jobs:
           
           echo "Free space:"
           df -h
-s
+
