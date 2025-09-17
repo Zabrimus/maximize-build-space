@@ -27,10 +27,10 @@ runs:
         docker builder prune -af || true
         
         echo "Remove non-important packages"
-        TOREMOVE=$(aptitude search '~i!~M!~prequired!~pimportant!~R~prequired!~R~R~prequired!~R~pimportant!~R~R~pimportant!initramfs-tools!eatmydata' | awk '{print $2}')
+        TOREMOVE=$(aptitude search '~i!~M!~prequired!~pimportant!~R~prequired!~R~R~prequired!~R~pimportant!~R~R~pimportant!initramfs-tools!eatmydata!shim-signed!grub2-common!sbsigntool' | awk '{print $2}')
         echo "Remove Packages $TOREMOVE"
         
-        sudo eatmydata apt -y purge $(aptitude search '~i!~M!~prequired!~pimportant!~R~prequired!~R~R~prequired!~R~pimportant!~R~R~pimportant!initramfs-tools!eatmydata' | awk '{print $2}')
+        sudo eatmydata apt -y purge $(aptitude search '~i!~M!~prequired!~pimportant!~R~prequired!~R~R~prequired!~R~pimportant!~R~R~pimportant!initramfs-tools!eatmydata!shim-signed!grub2-common!sbsigntool' | awk '{print $2}')
         
         echo "Autoremove"
         sudo eatmydata apt -y --purge autoremove
