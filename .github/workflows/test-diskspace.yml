@@ -21,7 +21,7 @@ jobs:
           echo " ENDE"
           echo "============================================"
           
-          apt search jdk
+          # apt search jdk
           
           echo "Free space:"
           df -h
@@ -44,7 +44,7 @@ jobs:
           echo " ENDE"
           echo "============================================"
           
-          apt search jdk
+          # apt search jdk
           
           echo "Free space:"
           df -h
