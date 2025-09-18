@@ -18,7 +18,7 @@ runs:
       shell: bash
       run: |
         echo "Remove shim-signed"
-        sudo apt remove --purge --allow-remove-essential shim-signed 
+        sudo apt remove --purge --allow-remove-essential shim-signed openjdk-21-jdk 
         
         echo "Remove snapd"
         sudo systemctl disable snapd || true
