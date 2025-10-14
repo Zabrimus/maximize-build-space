@@ -34,11 +34,9 @@ runs:
         echo "Remove Packages $TOREMOVE"
         
         sudo eatmydata apt -y purge $(aptitude search '~i!~M!~prequired!~pimportant!~R~prequired!~R~R~prequired!~R~pimportant!~R~R~pimportant!initramfs-tools!eatmydata!gh!git-ftp!git-lfs' | awk '{print $2}')
-
-        gh --version
         
         echo "Autoremove"
-        sudo c
+        sudo eatmydata apt -y --purge autoremove
         
         echo "Remove some directories"
         sudo rm -rf /var/lib/gems/3.2.0 /usr/libexec/docker /etc/needrestart/conf.d \
