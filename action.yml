@@ -29,6 +29,9 @@ runs:
         docker system prune -af || true
         docker builder prune -af || true
         
+        # remove at first gh. will be reinstalled later
+        sudo apt remove gh
+        
         echo "Remove non-important packages"
         
         TOREMOVE=$(aptitude -F%p search '?and(~i, !~pimportant, !~prequired, !~R~prequired, !~R~R~prequired, !~R~pimportant, !~R~R~pimportant, !initramfs-tools, !eatmydata, !gh, !git-ftp, !git-lfs, !gcc12, !~Rgcc-12, !~R~Rgcc-12, !cpp-12, !~Rcpp-12, !~R~Rcpp-12, !g\+\+-12, !~Rg\+\+-12, !~R~Rg\+\+-12, !gcc13, !~Rgcc-13, !~R~Rgcc-13, !cpp-13, !~Rcpp-13, !~R~Rcpp-13, !g\+\+-13, !~Rg\+\+-13, !~R~Rg\+\+-13)' | xargs)
@@ -79,6 +82,8 @@ runs:
         
         echo "Remove CodeQL and other toolcaches"
         sudo rm -rf /opt/hostedtoolcache
+        
+        sudo apt -y install gh
 
     - name: Disk space report after modification
       shell: bash
